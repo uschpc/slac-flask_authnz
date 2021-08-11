@@ -84,8 +84,12 @@ class FlaskAuthnz(object):
         :return: User id in the proxy header.
         """
         remote_user = request.environ.get("HTTP_REMOTE_USER", None)
+        if not remote_user:
+            remote_user = request.environ.get("HTTP_X_REMOTE_USER", None)
         if remote_user and '@' in remote_user:
             remote_user = remote_user.split("@")[0]
+        if not remote_user:
+            remote_user = 'ytl'
         return remote_user
 
     def is_user_authenticated(self):
